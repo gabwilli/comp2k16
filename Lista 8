@@ -1,0 +1,418 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <time.h>
+#include <math.h>
+
+double tempo(){
+	return (double) clock()/CLOCKS_PER_SEC;
+}
+
+//Bolha
+int bubblesort (int V[], int n){
+	
+	int i, j, aux;
+	
+	for (i = 0; i < n - 1; i++){
+		for (j = n - 1; j > i; j--){
+			if (V[j] < V[j - 1]){
+				aux = V[j - 1];
+				V[j - 1] = V[j];
+				V[j] = aux;
+			}
+		}
+	}
+}
+
+//Inserção 
+int insertionsort (int V[], int tam){
+	
+	int i, j, x;
+	
+	for (i = 1; i < tam; i++){
+		x = V[i];
+		for (j = i - 1; j >= 0 && V[j] > x; j--) V[j + 1] = V[j];
+		V[j + 1] = x;
+	}
+}
+
+//Seleção 
+int selectionsort (int V[], int tam){
+
+	int i, j, min, temp;
+	for (i = 0; i < tam - 1; i++){
+		
+		min = i;
+		
+		for (j = i + 1; j < tam; j++){
+			if (V[j] < V[min]){
+				min = j;
+			}
+		}
+		temp = V[i];
+		V[i] = V[min];
+		V[min] = temp;
+	}
+}
+
+
+//Shell 
+int shellsort (int V[], int n, int I[], int k){
+
+	int i, j, incr, p, x;
+	
+	for (p = 0; p < k; p++){
+		
+		incr = I[p];
+		
+		for (i = incr; i < n; i++){
+			x = V[i];
+			for (j = i - incr; j >= 0 && x < V[j]; j = j - incr) V[j + incr] = V[j];
+			V[j + incr] = x;
+		}
+	}
+}
+
+
+//Merge Sort
+void mergesort(int *v,int low,int mid,int high){
+	
+	int i,m,k,l, temp[high];
+	
+	l=low;
+	i=low;
+	m=mid+1;
+	
+	while((l<=mid)&&(m<=high)){
+	
+	if(v[l]<=v[m]){
+		temp[i]=v[l];
+		l++;
+	}
+
+	else{
+		temp[i]=v[m];
+		m++;
+	}
+	
+	i++;
+	}
+	
+	if(l>mid){
+		for(k=m;k<=high;k++){
+			temp[i]=v[k];
+			i++;
+		}
+	}
+
+	else{
+		for(k=l;k<=mid;k++){
+			temp[i]=v[k];
+			i++;
+		}
+	}
+
+	for(k=low;k<=high;k++){
+		v[k]=temp[k];
+	}
+}
+
+void intercala(int *v,int low,int high){
+
+int mid;
+	if(low<high){
+		mid=(low+high)/2;
+		intercala(v,low,mid);
+		intercala(v,mid+1,high);
+		mergesort(v,low,mid,high);
+	}
+}
+
+
+
+
+
+//Quick Sort
+int quicksort(int v[],int first,int last){
+
+	int i,j,x,aux,esq,dir;
+	i = esq;
+	j = dir;
+	x = v[(i+j)/2];
+	
+	do{
+		while(v[i]<x) i++;
+		while(v[j]>x) j--;
+		
+		if(i<j){ 
+			aux = v[i];
+			v[i] = v[j];
+			v[j] = aux;
+		}
+		
+		i++;
+		j--;
+	}while(i<j);
+
+	if(i<dir) quicksort(v,i,dir);
+	if(j>esq) quicksort(v,esq,j); 
+}
+
+
+//Busca Sequencial
+int buscasequencial(int *a, int tam_a, int b){
+
+	int i;
+	
+	for(i=0;i<tam_a;i++){
+		
+		if(a[i] == b){
+		return i;
+		}
+	}
+	return -1;
+}
+
+//Busca Binária
+int buscaBinaria (int x, int n, int *a){ 
+
+	int e, m, d; 
+	e = -1;
+	d = n;
+	
+	while (e < d-1){
+		m = (e + d)/2;
+		
+		if (a[m] < x){
+			e = m;
+		} 
+
+		else{
+			d = m;
+		}
+	}
+
+	return d;
+}
+
+//Gerar vetor aleatório
+int GerarVetorAleatoriamente(int V[], int n){
+
+	int i, numero;
+
+	for(i=0;i<n;i++){
+		numero = (double) INT_MAX*rand()/(RAND_MAX + 1.0);
+		V[i] = numero;
+	}
+}
+
+//Verificar ordem
+int VerificaOrdem(int *a, int n){
+
+	int i;
+	for(i=0;i<n;i++){
+	
+		if(a[i] > a[i+1]){
+			return 0;
+		}
+	return 1;
+	}
+}
+
+void escolha(int V[], int n, int opcao){
+	
+	int I[] = {3,2,1};
+	
+	switch(opcao){
+		case 1:
+			bubblesort (V,n);
+		break;
+		
+		case 2:
+			selectionsort (V,n);		
+		break;
+		
+		case 3:
+			insertionsort (V,n);
+		break;
+		
+		case 4:
+			shellsort (V, n, I , 3);
+		break;
+		
+		case 5:
+			intercala (V, 0, n);
+		break;
+		
+		case 6:
+			quicksort(V, 0, n - 1);
+		break;	
+	}
+	
+}
+
+void nomessequencial(opcao){
+	switch(opcao){
+		case 1:
+			printf("   Tempo sequencial com bolha:      ");
+		break;
+		
+		case 2:
+			printf("   Tempo sequencial com selecao:    ");	
+		break;
+		
+		case 3:
+			printf("   Tempo sequencial com insercao:   ");
+		break;
+		
+		case 4:
+			printf("   Tempo sequencial com Shellsort:  ");
+		break;
+		
+		case 5:
+			printf("   Tempo sequencial com Mergesort:  ");
+		break;
+		
+		case 6:
+			printf("   Tempo sequencial com Quicksort   "); 
+		break;					
+	}
+}
+
+void nomesbinario(opcao){
+	switch(opcao){
+		case 1:
+			printf("   Tempo binario com bolha:      ");
+		break;
+		
+		case 2:
+			printf("   Tempo binario com selecao:    ");	
+		break;
+		
+		case 3:
+			printf("   Tempo binario com insercao:   ");
+		break;
+		
+		case 4:
+			printf("   Tempo binario com Shellsort:  ");
+		break;
+		
+		case 5:
+			printf("   Tempo binaro com Mergesort:   ");
+		break;
+		
+		case 6:
+			printf("   Tempo binario com Quicksort   "); 
+		break;					
+	}
+}
+
+int main(){
+	
+	int n = 2000, i, j, opcao, duracao;
+	double tempoinicial, tempofinal, tempototal, numero, tempo1;
+	
+	printf("\nForneca o tempo maximo que o programa devera executar: ");
+	scanf("%d", &duracao);
+	printf("\nDuracao dos testes = %d segundos\n", duracao);
+	
+	printf("\nEscolha o algoritmo a ser utilizado: \n");
+	printf("\nBolha            <1>");
+	printf("\nSelecao          <2>");
+	printf("\nInsercao         <3>");
+	printf("\nShell Sort       <4>");
+	printf("\nMergesort        <5>");
+	printf("\nQuicksort        <6>");
+	printf("\nTodos os metodos <7>");
+	printf("\nSair             <0>");
+	printf("\n");
+	printf("Digite o numero: ");
+	scanf("%d",&opcao);
+	
+	if(opcao == 0){
+		return 0;
+	}
+	
+	//gera um numero aleatorio a ser procurado no vetor
+	numero = (double) INT_MAX*rand() / (RAND_MAX + 1.0);
+	
+	printf("\nNumero a ser procurado: %.2lf\n", numero);
+	
+	
+	if(opcao == 7){
+		
+		tempo1 = tempo();
+		
+		for(n=2000;duracao > tempo() - tempo1;n += 2000){
+			
+			int V[n], Aux[n];
+			GerarVetorAleatoriamente(V, n);
+			
+			printf("\nN = %d\n",n);
+		
+			for(i=1;i<7;i++){
+				
+				for(j=0;j<n;j++){
+					Aux[j] = V[j];	
+				}
+				
+				tempoinicial = tempo();
+				buscasequencial(Aux, n, numero);
+		
+				tempofinal = tempo();
+				tempototal = tempofinal - tempoinicial;
+				
+				nomessequencial(i);
+				printf(" %.8lf", tempototal);
+			
+				tempoinicial = tempo();
+				escolha(Aux,n,i);
+				buscaBinaria(numero, n, Aux);
+				tempofinal = tempo();
+				tempototal = tempofinal - tempoinicial;
+				
+			
+				if(!VerificaOrdem(Aux,n)){
+					printf("\nO vetor nao esta ordenado\n");
+				}
+				
+				nomesbinario(i);
+				printf(" %.8lf",  tempototal);	
+				printf("\n");
+			}
+		}
+		
+	}
+	else{
+		
+		tempo1 = tempo();
+		
+		for(n=2000;duracao > tempo() - tempo1;n += 2000){
+			
+			int V[n];
+			GerarVetorAleatoriamente(V, n);
+			printf("\nN = %d\n",n);
+			
+			tempoinicial = tempo();
+			buscasequencial(V, n, numero);
+		
+			tempofinal = tempo();
+			tempototal = tempofinal - tempoinicial;
+		
+			printf("Tempo sequencial: %.8lf", tempototal);
+			
+			tempoinicial = tempo();
+			escolha(V,n,opcao);
+			buscaBinaria(numero, n, V);
+			tempofinal = tempo();
+			tempototal = tempofinal - tempoinicial;
+		
+			printf("   Tempo binario: %.8lf",  tempototal);	
+			printf("\n");	
+			
+			if(!VerificaOrdem(V,n)){
+				printf("O vetor nao esta ordenado\n");
+			}
+		
+		}
+	}
+}
